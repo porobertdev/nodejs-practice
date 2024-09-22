@@ -7,25 +7,36 @@ const port = 3000;
 
 const server = createServer( async (req, res) => {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-
+    // res.setHeader('Content-Type', 'text/html');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    
     const catFact = await getCatFact();
-    console.log("🚀 ~ server ~ catFact:", catFact)
+
+    // create html file
+    createHTMLPage(catFact);
+
+    fs.readFile('./index.html', (err, data) => {
+        if (err) {
+            console.log('[ERROR] - index.html doesnt exist');
+        } else {
+            console.log('[FILE] - Reading index.html');
+            res.write(data);
+            res.end(catFact);
+        }
+    })
 
     // write to file
     saveData(catFact);
-
-    res.end(catFact);
 });
 
 server.listen(port, hostname, () => {
     eventEmitter.emit('created');
+
     console.log(`Server running at http://${hostname}:${port}/`);
 })
 
 // use EventEmitter
 server.on('connection', () => console.log('\n[CONNECTION] - Someone connected.\n'));
-
 async function getCatFact() {
     const response = await fetch('https://catfact.ninja/fact');
 
@@ -52,4 +63,18 @@ function saveData(data) {
             eventEmitter.emit('write', fileName);
         }
     });
+}
+
+function createHTMLPage(text) {
+    const html = `
+        <h1>Cat Fact</h1>
+        <p>${text}</p>
+    `;
+    const filePath = './index.html';
+
+    fs.writeFile(filePath, html, (err) => {
+        if (err) {
+            console.log(`[ERROR] - Failed to create file: ${filePath}`);
+        }
+    })
 }
