@@ -1,0 +1,10 @@
+{
+  "name": "nodejs-practice",
+  "version": "1.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "busboy": "^1.6.0"
+  }
+}

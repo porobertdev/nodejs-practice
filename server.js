@@ -2,6 +2,11 @@ const { createServer } = require('node:http');
 const fs = require('fs');
 const eventEmitter = require('./events');
 
+// support to upload files
+const busboy = require('busboy');
+const os = require('node:os');
+const path = require('node:path');
+
 const hostname = '127.0.0.1';
 const port = 3000;
 
@@ -10,7 +15,28 @@ const server = createServer( async (req, res) => {
 
     res.statusCode = 200;
 
-    if (req.url === '/') {
+    if (req.method === 'POST') {
+        console.log('POST request');
+
+        const bb = busboy({ headers: req.headers });
+
+        console.log("🚀 ~ server ~ bb:", bb)
+        bb.on('file', (name, file, info) => {
+            console.log("🚀 ~ bb.on ~ info:", info)
+            console.log('\n[UPLOAD] - Uploading file...')
+
+            const saveTo = path.join('./data/upload', info.filename);
+            file.pipe(fs.createWriteStream(saveTo));
+            console.log('\n[UPLOAD] - Finished to write file.')
+        });
+        bb.on('close', () => {
+            console.log('\n[UPLOAD] - Complete.');
+            res.writeHead(200, { 'Connection': 'close' });
+            res.end('Upload done.');
+        })
+
+        req.pipe(bb);
+    } else if (req.url === '/') {
         // if (req.ur)
         // res.setHeader('Content-Type', 'text/html');
         res.writeHead(200, {'Content-Type': 'text/html'});
