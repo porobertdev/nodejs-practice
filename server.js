@@ -1,6 +1,7 @@
 const { createServer } = require('node:http');
 const fs = require('fs');
 const eventEmitter = require('./events');
+const sendMail = require('./sendMail');
 
 // support to upload files
 const busboy = require('busboy');
@@ -78,7 +79,11 @@ server.listen(port, hostname, () => {
 })
 
 // use EventEmitter
-server.on('connection', () => console.log('\n[CONNECTION] - Someone connected.\n'));
+server.on('connection', () => {
+    console.log('\n[CONNECTION] - Someone connected.\n');
+    sendMail('Someone has connected to your server.')
+});
+
 async function getCatFact() {
     const response = await fetch('https://catfact.ninja/fact');
 
