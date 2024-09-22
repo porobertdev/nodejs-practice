@@ -6,27 +6,43 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = createServer( async (req, res) => {
+    console.log("🚀 ~ server ~ req:", req.url);
+
     res.statusCode = 200;
-    // res.setHeader('Content-Type', 'text/html');
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    
-    const catFact = await getCatFact();
 
-    // create html file
-    createHTMLPage(catFact);
+    if (req.url === '/') {
+        // if (req.ur)
+        // res.setHeader('Content-Type', 'text/html');
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        
+        const catFact = await getCatFact();
 
-    fs.readFile('./index.html', (err, data) => {
-        if (err) {
-            console.log('[ERROR] - index.html doesnt exist');
-        } else {
-            console.log('[FILE] - Reading index.html');
-            res.write(data);
-            res.end(catFact);
-        }
-    })
+        // create html file
+        createHTMLPage(catFact);
 
-    // write to file
-    saveData(catFact);
+        fs.readFile('./index.html', (err, data) => {
+            if (err) {
+                console.log('[ERROR] - index.html doesnt exist');
+            } else {
+                console.log('[FILE] - Reading index.html');
+                res.write(data);
+                res.end(catFact);
+            }
+        })
+
+        // write to file
+        saveData(catFact);
+    } else if (req.url === '/upload') {
+        res.writeHead(200, {'Content-Type': 'text/html'});
+
+        fs.readFile('./upload-file.html', (err, data) => {
+            if (err) {
+                // some shit :p
+            } else {
+                res.write(data);
+            }
+        })
+    }
 });
 
 server.listen(port, hostname, () => {
