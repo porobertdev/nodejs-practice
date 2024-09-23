@@ -2,6 +2,10 @@ const { createServer } = require('node:http');
 const fs = require('fs');
 const eventEmitter = require('./events');
 const sendMail = require('./sendMail');
+const dotenv = require('./environmentVars');
+
+// load .env variables
+dotenv();
 
 // support to upload files
 const busboy = require('busboy');
@@ -75,7 +79,8 @@ const server = createServer( async (req, res) => {
 server.listen(port, hostname, () => {
     eventEmitter.emit('created');
 
-    console.log(`Server running at http://${hostname}:${port}/`);
+    console.log(`Server running at http://${hostname}:${port}/ - [MODE: ${process.env.NODE_ENV}]`);
+    
 })
 
 // use EventEmitter
