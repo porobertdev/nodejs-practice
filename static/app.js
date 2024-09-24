@@ -6,12 +6,14 @@ const mockData = [
     {id: 'B1', name: 'Chocolate Bar', rrp: '22.40', info: 'Deliciously overpriced chocolate.'}
 ];
 
-const populateProducts = async () => {
+const populateProducts = async (category) => {
+    console.log(`${API}/${category}`);
+
     const products = document.querySelector('#products');
     products.innerHTML = '';
 
     // mock fetch
-    const res = await fetch(API);
+    const res = await fetch(`${API}/${category}`)
     const data = await res.json();
 
     for (const product of mockData) {
@@ -28,8 +30,10 @@ const populateProducts = async () => {
     }
 };
 
-document.querySelector('#fetch').addEventListener('click', async () => {
-    await populateProducts()
+const category = document.querySelector('#category')
+
+category.addEventListener('input', async ({ target }) => {
+    await populateProducts(target.value)
 });
 
 customElements.define('product-item', class Item extends HTMLElement {
