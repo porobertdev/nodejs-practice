@@ -73,6 +73,24 @@ const server = createServer( async (req, res) => {
                 res.write(data);
             }
         })
+    } else if (req.url === '/readStream') {
+        res.writeHead(200, { 'Content-Type': 'application/json'});
+
+        const readStream = fs.createReadStream('./data/catFacts.txt', 'utf8');
+
+        // Trigger event when data chunks are flowing
+        readStream.on('data', (chunk) => {
+            console.log(`Received chunk: ${chunk}`);
+        });
+
+        // Trigger event when all chunks have been handled
+        readStream.on('end', () => {
+            console.log('Data reading complete.');
+        });
+
+        readStream.on('error', (err) => {
+            console.error(`Error occured: ${err}`);
+        });
     }
 });
 
