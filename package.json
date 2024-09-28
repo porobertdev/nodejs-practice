@@ -4,7 +4,8 @@
   "description": "Testing ExpressJS",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --inspect app.js"
   },
   "author": "porobertdev",
   "license": "ISC",
