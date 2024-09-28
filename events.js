@@ -8,8 +8,4 @@ eventEmitter.on('write', (fileName) => console.log(`[FILES] Successfully wrote d
 
 eventEmitter.once('created', () => console.log('\n[SERVER] - Server was created.'));
 
-console.log(eventEmitter.eventNames());
-console.log(eventEmitter.listenerCount('get fact'));
-
-
 module.exports = eventEmitter;

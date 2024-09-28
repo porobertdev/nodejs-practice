@@ -10,9 +10,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-console.log(transporter);
-
-
 // example from nodemailer docs
 // async..await is not allowed in global scope, must use a wrapper
 async function sendMail(msg) {

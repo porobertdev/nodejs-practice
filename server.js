@@ -9,7 +9,6 @@ dotenv();
 
 // support to upload files
 const busboy = require('busboy');
-const os = require('node:os');
 const path = require('node:path');
 
 const hostname = '127.0.0.1';
@@ -80,17 +79,19 @@ const server = createServer( async (req, res) => {
 
         // Trigger event when data chunks are flowing
         readStream.on('data', (chunk) => {
-            console.log(`Received chunk: ${chunk}`);
+            console.log(`\nReceived chunk:\n\n ${chunk}`);
         });
 
         // Trigger event when all chunks have been handled
         readStream.on('end', () => {
-            console.log('Data reading complete.');
+            console.log('\n\nData reading complete.\n\n');
         });
 
         readStream.on('error', (err) => {
             console.error(`Error occured: ${err}`);
         });
+
+        res.end();
     }
 });
 
@@ -115,8 +116,6 @@ async function getCatFact() {
     // trigger event
     eventEmitter.emit('get fact');
     
-    console.log(data);
-
     return data.fact;
 }
 
