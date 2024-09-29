@@ -17,14 +17,17 @@ function logConnection(req, res, next) {
 
 app.use(logConnection);
 
+const pages = ['/', '/index', '/about', '/contact-me'];
+
 // Routes
-app.get('/', (req, res) => res.sendFile('./pages/index.html', {root: __dirname}));
-
-app.get('/about', (req, res) => res.sendFile('./pages/about.html', {root: __dirname}));
-
-app.get('/contact-me', (req, res) => res.sendFile('./pages/contact-me.html', {root: __dirname}));
-
-// handle routes that don't exist
-app.get('*', (req, res) => res.status(400).sendFile('./pages/404.html', {root: __dirname}));
+app.get('*', (req, res) => {
+    if (pages.includes(req.url)) {
+        // handle both '/' and '/index'
+        res.sendFile(`./pages${(req.url === '/') ? '/index' : req.url}.html`, {root: __dirname});
+    } else {
+        // page doesn't exist
+        res.sendFile('./pages/404.html', {root: __dirname});
+    }
+});
 
 app.listen(options.port, options.hostname, () => console.log(`Express Server running on ${options.hostname}:${options.port}`));
