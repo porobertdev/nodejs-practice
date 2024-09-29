@@ -17,13 +17,16 @@ function logConnection(req, res, next) {
 
 app.use(logConnection);
 
-const pages = ['/', '/index', '/about', '/contact-me'];
+const pages = ['/index', '/about', '/contact-me'];
 
 // Routes
+app.get('/', (req, res) => {
+    res.redirect('/index');
+});
+
 app.get('*', (req, res) => {
     if (pages.includes(req.url)) {
-        // handle both '/' and '/index'
-        res.sendFile(`./pages${(req.url === '/') ? '/index' : req.url}.html`, {root: __dirname});
+        res.sendFile(`./pages${req.url}.html`, {root: __dirname});
     } else {
         // page doesn't exist
         res.sendFile('./pages/404.html', {root: __dirname});
