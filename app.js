@@ -1,4 +1,6 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -25,7 +27,7 @@ app.all('/user', (req, res) => {
     res.send('This response is given to all /user requests.')
 });
 
-app.get('/about', (req, res) => res.send('This is a simple Express server'));
+app.get('/about', (req, res) => res.sendFile(path.join(__dirname, './public', 'about.html')));
 
 // Route Parameters using variables to capture request parameters
 app.get('/users/:userId/books/:bookId', (req, res) => {
