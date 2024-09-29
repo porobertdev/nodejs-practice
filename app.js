@@ -36,11 +36,20 @@ app.get('/users/:userId/books/:bookId', (req, res) => {
     res.send(req.params);
 });
 
+// Redirect request if user is admin
 app.get('/users/:username', (req, res) => {
     if (req.params.username === 'admin') {
-        res.send('Access granted for admin.');
+        console.log('Redirecting...');
+        res.redirect('/login/admin/dashboard');
+        console.log(res.statusCode)
     } else {
         res.send('Access denied.');
+    }
+});
+
+app.get('/login/:username/dashboard', (req, res) => {
+    if (req.params.username === 'admin') {
+        res.send('Access granted for admin.');
     }
 });
 
@@ -63,7 +72,7 @@ app.get('/list/users', (req, res, next) => {
 
 // Regex Route
 // moved at the bottom to allow /users/admin route to work.
-app.get(/a/, (req, res) => res.send('This response matches endpoints that contains letter `a` using a Regex pattern'));
+/* app.get(/a/, (req, res) => res.send('This response matches endpoints that contains letter `a` using a Regex pattern')); */
 
 // Start the server
 app.listen(PORT, () => console.log(`My first Express app - listening on port ${PORT}!`));
