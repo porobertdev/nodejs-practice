@@ -1,9 +1,61 @@
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Route
 app.get('/', (req, res) => res.send('Hello world!'));
+app.post('/', (req, res) => res.send('Got POST request'));
+app.put('/user', (req, res) => res.send('Got a PUT request at /user'));
+app.delete('/user', (req, res, next) => {
+    /*
+    if there's another middleware function assigned
+    to the same route, then jump to it using next()
+    
+    if you remove `next` logic, then it will send
+    the response from this middleware function.
+    */
+   if (next) {
+       next();
+    } else {
+        res.send('Got DELETE request at /user')
+    }
+});
+// do something for all method requests
+app.all('/user', (req, res) => {
+    res.send('This response is given to all /user requests.')
+});
 
-const PORT = process.env.PORT || 3000;
+app.get('/about', (req, res) => res.send('This is a simple Express server'));
 
+// Route Parameters using variables to capture request parameters
+app.get('/users/:userId/books/:bookId', (req, res) => {
+    const { userId, bookId } = req.params;
+
+    console.log(`${(+userId === 0) ? 'Admin' : 'Normal'} user read a book with ID ${bookId}`);
+
+    res.send(req.params);
+});
+
+app.get('/users/:username', (req, res) => {
+    if (req.params.username === 'admin') {
+        res.send('Access granted for admin.');
+    } else {
+        res.send('Access denied.');
+    }
+});
+
+// Chained middleware functions
+app.get('/list/users', (req, res, next) => {
+    console.log('Request URL:', req.originalUrl);
+    next();
+}, (req, res, next) => {
+    console.log('Request Type:', req.method);
+    next();
+}, (req, res) => console.log('This is the third middleware function'));
+
+// Regex Route
+// moved at the bottom to allow /users/admin route to work.
+app.get(/a/, (req, res) => res.send('This response matches endpoints that contains letter `a` using a Regex pattern'));
+
+// Start the server
 app.listen(PORT, () => console.log(`My first Express app - listening on port ${PORT}!`));
