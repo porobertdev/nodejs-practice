@@ -74,5 +74,18 @@ app.get('/list/users', (req, res, next) => {
 // moved at the bottom to allow /users/admin route to work.
 /* app.get(/a/, (req, res) => res.send('This response matches endpoints that contains letter `a` using a Regex pattern')); */
 
+
+// Chained Route Handler: multiple HTTP methods on the same route
+app.route('/book')
+    .get((req, res) => {
+        res.send('Get a random book.');
+    })
+    .post((req, res) => {
+        res.send('Add a book.')
+    })
+    .put((req, res) => {
+        res.send('Update the book.');
+    });
+
 // Start the server
 app.listen(PORT, () => console.log(`My first Express app - listening on port ${PORT}!`));
