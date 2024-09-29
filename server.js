@@ -1,38 +1,30 @@
-const http = require('node:http');
-const fs = require('node:fs');
-const getHTMLPath = require('./getPath');
+const express = require('express');
+
 
 const options = {
     // hostname: 0.0.0.0 to make it accessible from phone connected to wifi
     hostname: '127.0.0.1',
     port: 3000,
-    path: '/',
-    method: 'GET'
 };
 
-const server = http.createServer((req, res) => {
-    console.log("🚀 ~ server ~ req:", req.url);
+const app = express();
 
-    res.writeHead(200, {'Content-Type': 'text/html'});
+// Middleware function
+function logConnection(req, res, next) {
+    console.log('Someone made a request.');
+    next();
+}
 
-    // pick the HTML file that user tries to access
-    const htmlPage = getHTMLPath(req.url);
+app.use(logConnection);
 
-    // read the HTML content to include it in the response for client
-    fs.readFile(htmlPage, (err, data) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.write(data);
-            res.end();
-        }
-    });
-})
+// Routes
+app.get('/', (req, res) => res.sendFile('./pages/index.html', {root: __dirname}));
 
-server.listen(options.port, options.hostname, () => {
-    console.log(`Listening on ${options.hostname}:${options.port}`);
-})
+app.get('/about', (req, res) => res.sendFile('./pages/about.html', {root: __dirname}));
 
-server.on('connection', () => {
-    console.log('Someone has connected.');
-});
+app.get('/contact-me', (req, res) => res.sendFile('./pages/contact-me.html', {root: __dirname}));
+
+// handle routes that don't exist
+app.get('*', (req, res) => res.status(400).sendFile('./pages/404.html', {root: __dirname}));
+
+app.listen(options.port, options.hostname, () => console.log(`Express Server running on ${options.hostname}:${options.port}`));
