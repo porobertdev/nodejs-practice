@@ -51,7 +51,15 @@ app.get('/list/users', (req, res, next) => {
 }, (req, res, next) => {
     console.log('Request Type:', req.method);
     next();
-}, (req, res) => console.log('This is the third middleware function'));
+}, (req, res, next) => {
+    console.log('This is the third middleware function');
+
+    // uses 'route' to skip/bypass next middlewares.
+    // it's like saying "stop here"
+    next('route');
+}, (req, res) => {
+    console.log('Fourth middleware function, but wont get called');
+});
 
 // Regex Route
 // moved at the bottom to allow /users/admin route to work.
