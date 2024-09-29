@@ -1,10 +1,13 @@
 const express = require('express');
 const path = require('path');
+const usersRouter = require('./routes/usersRouter');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Route
+// Routes
+app.use('/users', usersRouter);
+
 app.get('/', (req, res) => res.send('Hello world!'));
 app.post('/', (req, res) => res.send('Got POST request'));
 app.put('/user', (req, res) => res.send('Got a PUT request at /user'));
@@ -22,32 +25,13 @@ app.delete('/user', (req, res, next) => {
         res.send('Got DELETE request at /user')
     }
 });
+
 // do something for all method requests
 app.all('/user', (req, res) => {
     res.send('This response is given to all /user requests.')
 });
 
 app.get('/about', (req, res) => res.sendFile(path.join(__dirname, './public', 'about.html')));
-
-// Route Parameters using variables to capture request parameters
-app.get('/users/:userId/books/:bookId', (req, res) => {
-    const { userId, bookId } = req.params;
-
-    console.log(`${(+userId === 0) ? 'Admin' : 'Normal'} user read a book with ID ${bookId}`);
-
-    res.send(req.params);
-});
-
-// Redirect request if user is admin
-app.get('/users/:username', (req, res) => {
-    if (req.params.username === 'admin') {
-        console.log('Redirecting...');
-        res.redirect('/login/admin/dashboard');
-        console.log(res.statusCode)
-    } else {
-        res.send('Access denied.');
-    }
-});
 
 app.get('/login/:username/dashboard', (req, res) => {
     if (req.params.username === 'admin') {
