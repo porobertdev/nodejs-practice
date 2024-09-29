@@ -87,5 +87,10 @@ app.route('/book')
         res.send('Update the book.');
     });
 
+// Serve static files
+app.use(express.static('public')); // can access /about.html
+// with virtual path: /static/about.html
+app.use('/static', express.static('public'));
+
 // Start the server
 app.listen(PORT, () => console.log(`My first Express app - listening on port ${PORT}!`));
