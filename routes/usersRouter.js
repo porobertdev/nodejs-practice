@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const getUserById = require('../controllers/userController');
+const userController = require('../controllers/userController');
 
 const usersRouter = Router();
 
@@ -14,16 +14,28 @@ usersRouter.get('/:userId/books/:bookId', (req, res) => {
 
 // Redirect request if user is admin
 usersRouter.get('/:username', (req, res) => {
-    if (req.params.username === 'admin') {
+    const username = req.params.username;
+
+    if (username === 'admin') {
         console.log('Redirecting...');
         res.redirect('/login/admin/dashboard');
         console.log(res.statusCode)
     } else {
-        res.send('Access denied.');
+        // this error is catched by Error middleware function at the bottom
+        throw new Error(`Access denied for user: ${username}`);
     }
 });
 
 // Controller
-usersRouter.get('/id/:id', getUserById);
+usersRouter.get('/create/:id', userController.createUser);
+usersRouter.get('/id/:id', userController.getUserById);
+
+/*
+    Method 3 for catching errors: An Error middleware function.
+*/
+usersRouter.use((err, req, res, next) => {
+    console.log(err.message);
+    res.status(err.statusCode).send(err);
+});
 
 module.exports = usersRouter;
