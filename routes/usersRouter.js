@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const getUserById = require('../controllers/userController');
 
 const usersRouter = Router();
 
@@ -21,5 +22,8 @@ usersRouter.get('/:username', (req, res) => {
         res.send('Access denied.');
     }
 });
+
+// Controller
+usersRouter.get('/id/:id', getUserById);
 
 module.exports = usersRouter;
