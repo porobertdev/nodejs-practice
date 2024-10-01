@@ -35,7 +35,7 @@ usersRouter.get('/id/:id', userController.getUserById);
 */
 usersRouter.use((err, req, res, next) => {
     console.log(err.message);
-    res.status(err.statusCode).send(err);
+    res.status(err.statusCode || 404).send(err);
 });
 
 module.exports = usersRouter;
