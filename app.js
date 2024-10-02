@@ -5,6 +5,20 @@ const usersRouter = require('./routes/usersRouter');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
+// variable storing links for the navbar component
+const navbarLinks = [
+    { href: '/', text: 'Home' },
+    { href: '/about', text: 'About'}
+];
+
+const socialLinks = [
+    {name: 'Twitter', url: 'https://www.twitter.com'},
+    {name: 'Facebook', url: 'https://www.facebook.com'},
+    {name: 'Tiktok', url: 'https://www.tiktok.com'},
+    {name: 'Instagram', url: 'https://www.instagram.com'},
+];
+    
 // App Properties
 // set views directory which holds templates
 app.set('views', path.join(__dirname, 'views'));
@@ -19,21 +33,12 @@ app.get('/', (req, res) => {
     res.locals.bye = 'Bye bye!';
     app.locals.test = 'And this sentence is stored on app.locals, so it works in all middlewares, unlike res.locals that exists only in the middleware that process the current request-response cycle.'
 
-    // variable storing links for the navbar component
-    const links = [
-        { href: '/', text: 'Home' },
-        { href: '/about', text: 'About'}
-    ];
+    // set them on app, so that /about's route handler can access them too.
+    // app.locals.links = links;
 
     const users = ['Rose', 'Cake', 'Biff'];
-    const socialLinks = [
-        {name: 'Twitter', url: 'https://www.twitter.com'},
-        {name: 'Facebook', url: 'https://www.facebook.com'},
-        {name: 'Tiktok', url: 'https://www.tiktok.com'},
-        {name: 'Instagram', url: 'https://www.instagram.com'},
-    ]
 
-    res.render('index', { message: 'This is just a test using EJS template engine!', links, users, socialLinks});
+    res.render('index', { message: 'This is just a test using EJS template engine!', navbarLinks, users, socialLinks});
 });
 
 app.post('/', (req, res) => res.send('Got POST request'));
@@ -58,7 +63,10 @@ app.all('/user', (req, res) => {
     res.send('This response is given to all /user requests.')
 });
 
-app.get('/about', (req, res) => res.sendFile(path.join(__dirname, './public', 'about.html')));
+// app.get('/about', (req, res) => res.sendFile(path.join(__dirname, './public', 'about.html')));
+app.get('/about', (req, res) => {
+    res.render('about', { about: 'This is a weird message ahahah', socialLinks, navbarLinks });
+})
 
 app.get('/login/:username/dashboard', (req, res) => {
     if (req.params.username === 'admin') {

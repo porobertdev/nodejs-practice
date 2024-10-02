@@ -5,7 +5,7 @@
     </head>
 
     <body>
-        <%- include('navbar', {links: links}) %>
+        <%- include('navbar', navbarLinks) %>
 
         <!-- EJS Variable that takes data passed from the route handler (middleware) in app.js -->
         <%= message %>
@@ -30,7 +30,7 @@
         </ul>
         
         <!-- FOOTER -->
-        <%- include('footer') %>
+        <%- include('footer', socialLinks) %>
 
     </body>
 </html>
