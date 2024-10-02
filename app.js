@@ -26,8 +26,14 @@ app.get('/', (req, res) => {
     ];
 
     const users = ['Rose', 'Cake', 'Biff'];
+    const socialLinks = [
+        {name: 'Twitter', url: 'https://www.twitter.com'},
+        {name: 'Facebook', url: 'https://www.facebook.com'},
+        {name: 'Tiktok', url: 'https://www.tiktok.com'},
+        {name: 'Instagram', url: 'https://www.instagram.com'},
+    ]
 
-    res.render('index', { message: 'This is just a test using EJS template engine!', links, users});
+    res.render('index', { message: 'This is just a test using EJS template engine!', links, users, socialLinks});
 });
 
 app.post('/', (req, res) => res.send('Got POST request'));

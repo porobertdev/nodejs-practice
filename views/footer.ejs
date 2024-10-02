@@ -1,0 +1,9 @@
+<footer>
+    <div class="social-links">
+        <ul>
+            <% socialLinks.forEach(link => { %>
+                <li><a href="<%= link.url %>"> <%= link.name %> </a></li>
+            <% }); %>
+        </ul>
+    </div>
+</footer>
