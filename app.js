@@ -25,7 +25,9 @@ app.get('/', (req, res) => {
         { href: '/about', text: 'About'}
     ];
 
-    res.render('index', { message: 'This is just a test using EJS template engine!', links});
+    const users = ['Rose', 'Cake', 'Biff'];
+
+    res.render('index', { message: 'This is just a test using EJS template engine!', links, users});
 });
 
 app.post('/', (req, res) => res.send('Got POST request'));

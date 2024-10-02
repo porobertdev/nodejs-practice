@@ -17,5 +17,11 @@
         <!-- this variable doesn't exist, but its undefined since it's a property and wont cause error -->
         <%= locals.foo %>
 
+
+        <ul>
+            <% users.forEach( user => { %>
+                <%- include('users/user', {user: user}); %>
+            <% }); %>
+        </ul>
     </body>
 </html>
