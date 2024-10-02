@@ -19,7 +19,13 @@ app.get('/', (req, res) => {
     res.locals.bye = 'Bye bye!';
     app.locals.test = 'And this sentence is stored on app.locals, so it works in all middlewares, unlike res.locals that exists only in the middleware that process the current request-response cycle.'
 
-    res.render('index', { message: 'This is just a test using EJS template engine!'});
+    // variable storing links for the navbar component
+    const links = [
+        { href: '/', text: 'Home' },
+        { href: '/about', text: 'About'}
+    ];
+
+    res.render('index', { message: 'This is just a test using EJS template engine!', links});
 });
 
 app.post('/', (req, res) => res.send('Got POST request'));
