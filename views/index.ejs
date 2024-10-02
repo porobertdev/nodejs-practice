@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <!-- EJS Variable that takes data passed from the route handler (middleware) in app.js -->
+        <%= message %>
+
+        <br>
+        <br>
+        <!-- variable (property) defined on res.locals in the middleware handler -->
+        <%= bye %>
+
+        <br>
+        <br>
+        <%= test %>
+
+        <!-- this variable doesn't exist, but its undefined since it's a property and wont cause error -->
+        <%= locals.foo %>
+
+    </body>
+</html>
